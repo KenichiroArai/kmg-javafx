@@ -69,11 +69,11 @@ jobs:
           path: target/site/jacoco/
 
       - name: Dependency Review
-        uses: actions/dependency-review-action@v3
+        uses: actions/dependency-review-action@v4.8.1
         with:
           fail-on-severity: high
           deny-licenses: AGPL-1.0-or-later
 
       - name: Update dependency graph
-        uses: advanced-security/maven-dependency-submission-action@v1
+        uses: advanced-security/maven-dependency-submission-action@v5
         continue-on-error: true
