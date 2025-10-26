@@ -37,6 +37,16 @@ public class AbstractKmgJunitTestTest extends AbstractKmgJunitTest {
     static class TestConfig {
 
         /**
+         * デフォルトコンストラクタ
+         *
+         * @since 0.1.0
+         */
+        TestConfig() {
+
+            // 処理なし
+        }
+
+        /**
          * メッセージソースを返す<br>
          *
          * @since 0.1.0
