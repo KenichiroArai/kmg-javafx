@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # Java開発環境のセットアップ（GitHub Packages認証込み）
-      - name: Set up JDK 21 + Maven credentials (github)
+      - name: Set up JDK 21 + Maven credentials
         uses: actions/setup-java@v4
         with:
           java-version: "21"
@@ -32,15 +32,31 @@ jobs:
           server-username: ${{ github.actor }}
           server-password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 追加のGitHub Packages認証（github-kmg-fund）
-      - name: Add second server (github-kmg-fund)
-        uses: actions/setup-java@v4
-        with:
-          java-version: "21"
-          distribution: "temurin"
-          server-id: github-kmg-fund
-          server-username: ${{ github.actor }}
-          server-password: ${{ secrets.GITHUB_TOKEN }}
+      # Maven設定ファイルの手動作成（複数のリポジトリに対応）
+      - name: Configure Maven settings for multiple repositories
+        run: |
+          mkdir -p $HOME/.m2
+          cat > $HOME/.m2/settings.xml << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                    http://maven.apache.org/xsd/settings-1.0.0.xsd">
+            <servers>
+              <server>
+                <id>github</id>
+                <username>${{ github.actor }}</username>
+                <password>${{ secrets.GITHUB_TOKEN }}</password>
+              </server>
+              <server>
+                <id>github-kmg-fund</id>
+                <username>${{ github.actor }}</username>
+                <password>${{ secrets.GITHUB_TOKEN }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+          echo "Maven settings.xml created successfully"
 
       # Maven設定の確認（デバッグ用）
       - name: Verify Maven settings
@@ -86,7 +102,7 @@ jobs:
         if: success()
         uses: softprops/action-gh-release@v2.4.1
         with:
-          files: target/kmg-fund-*.jar
+          files: target/kmg-javafx-*.jar
           generate_release_notes: true
           body: |
             ## 成果物
