@@ -40,6 +40,10 @@ jobs:
                         "id": "github",
                         "username": "${{ github.actor }}",
                         "password": "${{ secrets.GITHUB_TOKEN }}"
+                      }, {
+                        "id": "github-kmg-fund",
+                        "username": "${{ github.actor }}",
+                        "password": "${{ secrets.GITHUB_TOKEN }}"
                       }]
 
             # バージョン情報の確認
