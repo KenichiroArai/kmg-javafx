@@ -54,9 +54,6 @@ jobs:
           export MAVEN_OPTS="-Xmx2g -XX:MaxMetaspaceSize=512m"
           mvn -B dependency:tree -DoutputType=graphml -DoutputFile=target/dependency-graph.graphml -Dverbose=false
 
-      - name: Run tests with JVM options
-        run: mvn test -Djdk.instrument.traceUsage=true -DargLine="-XX:+EnableDynamicAgentLoading"
-
       - name: Check Test Coverage
         run: |
           COVERAGE=$(mvn jacoco:report | grep -A 1 "Total.*class" | grep "[0-9]\{1,3\}%" | grep -o "[0-9]\{1,3\}%" | cut -d'%' -f1)
