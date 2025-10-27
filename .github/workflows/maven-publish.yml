@@ -54,6 +54,20 @@ jobs:
                 <password>${{ secrets.GITHUB_TOKEN }}</password>
               </server>
             </servers>
+            <mirrors>
+              <mirror>
+                <id>github-kmg-core</id>
+                <mirrorOf>github</mirrorOf>
+                <name>GitHub KMG Core Packages</name>
+                <url>https://maven.pkg.github.com/KenichiroArai/kmg-core</url>
+              </mirror>
+              <mirror>
+                <id>github-kmg-fund</id>
+                <mirrorOf>github-kmg-fund</mirrorOf>
+                <name>GitHub KMG Fund Packages</name>
+                <url>https://maven.pkg.github.com/KenichiroArai/kmg-fund</url>
+              </mirror>
+            </mirrors>
           </settings>
           EOF
           echo "Maven settings.xml created successfully"
@@ -68,6 +82,24 @@ jobs:
           else
               echo "Maven settings.xml not found!"
           fi
+
+      # 認証テスト
+      - name: GitHub Packages認証テスト
+        run: |
+          echo "GitHub Packagesへの認証をテストします..."
+          echo "GitHub Actor: ${{ github.actor }}"
+          echo "Repository: ${{ github.repository }}"
+
+          # 各リポジトリへのアクセステスト
+          echo "Testing access to kmg-core repository..."
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github.v3+json" \
+               "https://api.github.com/orgs/KenichiroArai/packages/maven/kmg.core" || echo "kmg-core access failed"
+
+          echo "Testing access to kmg-fund repository..."
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github.v3+json" \
+               "https://api.github.com/orgs/KenichiroArai/packages/maven/kmg.fund" || echo "kmg-fund access failed"
 
       # バージョン情報の確認
       - name: バージョン情報の確認
