@@ -28,9 +28,6 @@ jobs:
           java-version: "21"
           distribution: "temurin"
           cache: maven
-          server-id: github
-          server-username: ${{ github.actor }}
-          server-password: ${{ secrets.GITHUB_TOKEN }}
 
       # Maven設定ファイルの手動作成（複数のリポジトリに対応）
       - name: Configure Maven settings for multiple repositories
@@ -57,20 +54,6 @@ jobs:
                 <password>$GITHUB_TOKEN</password>
               </server>
             </servers>
-            <mirrors>
-              <mirror>
-                <id>github-kmg-core</id>
-                <mirrorOf>github-kmg-core</mirrorOf>
-                <name>GitHub KMG Core Packages</name>
-                <url>https://maven.pkg.github.com/KenichiroArai/kmg-core</url>
-              </mirror>
-              <mirror>
-                <id>github-kmg-fund</id>
-                <mirrorOf>github-kmg-fund</mirrorOf>
-                <name>GitHub KMG Fund Packages</name>
-                <url>https://maven.pkg.github.com/KenichiroArai/kmg-fund</url>
-              </mirror>
-            </mirrors>
           </settings>
           EOF
           echo "Maven settings.xml created successfully"
