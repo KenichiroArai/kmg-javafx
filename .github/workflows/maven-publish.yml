@@ -53,6 +53,11 @@ jobs:
                 <username>$GITHUB_ACTOR</username>
                 <password>$GITHUB_TOKEN</password>
               </server>
+              <server>
+                <id>github-kmg-javafx</id>
+                <username>$GITHUB_ACTOR</username>
+                <password>$GITHUB_TOKEN</password>
+              </server>
             </servers>
           </settings>
           EOF
@@ -87,11 +92,23 @@ jobs:
                -H "Accept: application/vnd.github.v3+json" \
                "https://api.github.com/orgs/KenichiroArai/packages/maven/kmg.fund" || echo "kmg-fund access failed"
 
+          echo "Testing access to kmg-javafx repository..."
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github.v3+json" \
+               "https://api.github.com/orgs/KenichiroArai/packages/maven/kmg.javafx" || echo "kmg-javafx access failed"
+
       # バージョン情報の確認
       - name: バージョン情報の確認
         run: |
           echo "バージョン情報の確認を開始します..."
           mvn versions:display-property-updates
+
+      # 依存関係の解決テスト
+      - name: 依存関係の解決テスト
+        run: |
+          echo "依存関係の解決をテストします..."
+          mvn -B dependency:resolve -X
+          echo "依存関係の解決テストが完了しました"
 
       # プロジェクトのビルドとテスト
       - name: テストとビルド
@@ -112,7 +129,7 @@ jobs:
       - name: Publish to GitHub Packages
         run: |
           echo "GitHub Packagesへの公開を開始します..."
-          mvn deploy
+          mvn -B deploy -X
           echo "パッケージの公開が完了しました"
 
       # GitHubリリースの作成
