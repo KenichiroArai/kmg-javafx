@@ -33,7 +33,7 @@
         <dependency>
             <groupId>kmg.core</groupId>
             <artifactId>kmg-core</artifactId>
-            <version>0.2.1</version>
+            <version>0.2.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>ch.qos.logback</groupId>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>kmg.fund</groupId>
             <artifactId>kmg-fund</artifactId>
-            <version>0.2.0</version>
+            <version>0.2.1</version>
         </dependency>
 
         <!-- JavaFX -->
@@ -214,7 +214,7 @@
     <repositories>
         <!-- KMG シリーズ -->
         <repository>
-            <id>github</id>
+            <id>github-kmg-core</id>
             <name>GitHub KenichiroArai Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/KenichiroArai/kmg-core</url>
         </repository>
@@ -228,7 +228,7 @@
     <distributionManagement>
         <!-- KMG シリーズ -->
         <repository>
-            <id>github</id>
+            <id>github-kmg-javafx</id>
             <name>GitHub KenichiroArai Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/KenichiroArai/kmg-javafx</url>
         </repository>
