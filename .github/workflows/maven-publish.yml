@@ -21,81 +21,26 @@ jobs:
       # ソースコードをチェックアウト
       - uses: actions/checkout@v4
 
-      # Java開発環境のセットアップ（GitHub Packages認証込み）
-      - name: Set up JDK 21 + Maven credentials
+      # Java開発環境のセットアップ
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: "21"
           distribution: "temurin"
           cache: maven
+          server-id: github-kmg-core
+          settings-path: ${{ github.workspace }}
 
-      # Maven設定ファイルの手動作成（複数のリポジトリに対応）
-      - name: Configure Maven settings for multiple repositories
-        env:
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          mkdir -p $HOME/.m2
-          cat > $HOME/.m2/settings.xml << EOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                    http://maven.apache.org/xsd/settings-1.0.0.xsd">
-            <servers>
-              <server>
-                <id>github-kmg-core</id>
-                <username>$GITHUB_ACTOR</username>
-                <password>$GITHUB_TOKEN</password>
-              </server>
-              <server>
-                <id>github-kmg-fund</id>
-                <username>$GITHUB_ACTOR</username>
-                <password>$GITHUB_TOKEN</password>
-              </server>
-              <server>
-                <id>github-kmg-javafx</id>
-                <username>$GITHUB_ACTOR</username>
-                <password>$GITHUB_TOKEN</password>
-              </server>
-            </servers>
-          </settings>
-          EOF
-          echo "Maven settings.xml created successfully"
-
-      # Maven設定の確認（デバッグ用）
-      - name: Verify Maven settings
-        run: |
-          echo "Using settings: $HOME/.m2/settings.xml"
-          if [ -f "$HOME/.m2/settings.xml" ]; then
-              echo "Maven settings.xml found:"
-              sed -E 's/(<password>).*?(<\/password>)/\1***\2/g' $HOME/.m2/settings.xml
-          else
-              echo "Maven settings.xml not found!"
-          fi
-
-      # 認証テスト
-      - name: GitHub Packages認証テスト
-        run: |
-          echo "GitHub Packagesへの認証をテストします..."
-          echo "GitHub Actor: ${{ github.actor }}"
-          echo "Repository: ${{ github.repository }}"
-
-          # 各リポジトリへのアクセステスト
-          echo "Testing access to kmg-core repository..."
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               -H "Accept: application/vnd.github.v3+json" \
-               "https://api.github.com/orgs/KenichiroArai/packages/maven/kmg.core" || echo "kmg-core access failed"
-
-          echo "Testing access to kmg-fund repository..."
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               -H "Accept: application/vnd.github.v3+json" \
-               "https://api.github.com/orgs/KenichiroArai/packages/maven/kmg.fund" || echo "kmg-fund access failed"
-
-          echo "Testing access to kmg-javafx repository..."
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               -H "Accept: application/vnd.github.v3+json" \
-               "https://api.github.com/orgs/KenichiroArai/packages/maven/kmg.javafx" || echo "kmg-javafx access failed"
+      # Maven設定の構成
+      - name: Configure Maven settings.xml
+        uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: |
+            [{
+              "id": "github-kmg-core",
+              "username": "${{ github.actor }}",
+              "password": "${{ secrets.GITHUB_TOKEN }}"
+            }]
 
       # バージョン情報の確認
       - name: バージョン情報の確認
@@ -103,18 +48,11 @@ jobs:
           echo "バージョン情報の確認を開始します..."
           mvn versions:display-property-updates
 
-      # 依存関係の解決テスト
-      - name: 依存関係の解決テスト
-        run: |
-          echo "依存関係の解決をテストします..."
-          mvn -B dependency:resolve -X
-          echo "依存関係の解決テストが完了しました"
-
       # プロジェクトのビルドとテスト
       - name: テストとビルド
         run: |
           echo "Mavenビルドとテストプロセスを開始します..."
-          mvn -B verify
+          mvn -B verify --file pom.xml
           echo "Mavenビルドとテストが完了しました"
 
       # カバレッジレポートのアップロード
@@ -125,17 +63,33 @@ jobs:
           path: target/site/jacoco/
           retention-days: 7
 
+      # Javadocの生成
+      - name: Javadocの生成
+        run: |
+          echo "Javadocの生成を開始します..."
+          mvn javadoc:javadoc
+          echo "Javadocの生成が完了しました"
+
+      # Javadocのアップロード
+      - name: Javadocのアップロード
+        uses: actions/upload-artifact@v4
+        with:
+          name: javadoc
+          path: docs/javadoc/
+          retention-days: 7
+
       # GitHub Packagesへの公開
       - name: Publish to GitHub Packages
         run: |
           echo "GitHub Packagesへの公開を開始します..."
-          mvn -B deploy -X
+          mvn deploy
           echo "パッケージの公開が完了しました"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # GitHubリリースの作成
       - name: Create Release
-        if: success()
-        uses: softprops/action-gh-release@v2.4.1
+        uses: softprops/action-gh-release@v2
         with:
           files: target/kmg-javafx-*.jar
           generate_release_notes: true
