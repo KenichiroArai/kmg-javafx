@@ -34,9 +34,12 @@ jobs:
 
       # Maven設定ファイルの手動作成（複数のリポジトリに対応）
       - name: Configure Maven settings for multiple repositories
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p $HOME/.m2
-          cat > $HOME/.m2/settings.xml << 'EOF'
+          cat > $HOME/.m2/settings.xml << EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -45,13 +48,13 @@ jobs:
             <servers>
               <server>
                 <id>github</id>
-                <username>${{ github.actor }}</username>
-                <password>${{ secrets.GITHUB_TOKEN }}</password>
+                <username>$GITHUB_ACTOR</username>
+                <password>$GITHUB_TOKEN</password>
               </server>
               <server>
                 <id>github-kmg-fund</id>
-                <username>${{ github.actor }}</username>
-                <password>${{ secrets.GITHUB_TOKEN }}</password>
+                <username>$GITHUB_ACTOR</username>
+                <password>$GITHUB_TOKEN</password>
               </server>
             </servers>
             <mirrors>
@@ -111,7 +114,7 @@ jobs:
       - name: テストとビルド
         run: |
           echo "Mavenビルドとテストプロセスを開始します..."
-          mvn -B verify --file pom.xml
+          mvn -B verify
           echo "Mavenビルドとテストが完了しました"
 
       # カバレッジレポートのアップロード
