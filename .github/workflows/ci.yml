@@ -85,6 +85,14 @@ jobs:
           fail-on-severity: high
           deny-licenses: AGPL-1.0-or-later
 
+      - name: Resolve dependencies for dependency graph
+        run: |
+          echo "依存関係を解決してキャッシュします..."
+          mvn -B dependency:resolve -DskipTests
+          echo "依存関係の解決が完了しました"
+
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@v5
         continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
