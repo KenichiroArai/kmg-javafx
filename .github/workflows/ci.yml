@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  actions: write
+  contents: read
+  packages: read
   security-events: write
 
 jobs:
@@ -54,6 +54,25 @@ jobs:
           </settings>
           EOF
 
+      - name: Resolve dependencies for dependency graph
+        run: |
+          echo "依存関係を解決してキャッシュします..."
+          mvn -B dependency:resolve dependency:go-offline -DskipTests
+          echo "依存関係の解決が完了しました"
+          echo "Maven設定ファイルの確認:"
+          if [ -f "$HOME/.m2/settings.xml" ]; then
+            echo "settings.xmlが存在します"
+            cat $HOME/.m2/settings.xml
+          else
+            echo "⚠️ settings.xmlが見つかりません"
+          fi
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4.8.1
+        with:
+          fail-on-severity: high
+          deny-licenses: AGPL-1.0-or-later
+
       - name: Build with Maven
         run: mvn -B package --file pom.xml -Dmaven.test.skip=false
 
@@ -78,25 +97,6 @@ jobs:
         with:
           name: coverage-report
           path: target/site/jacoco/
-
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v4.8.1
-        with:
-          fail-on-severity: high
-          deny-licenses: AGPL-1.0-or-later
-
-      - name: Resolve dependencies for dependency graph
-        run: |
-          echo "依存関係を解決してキャッシュします..."
-          mvn -B dependency:resolve dependency:go-offline -DskipTests
-          echo "依存関係の解決が完了しました"
-          echo "Maven設定ファイルの確認:"
-          if [ -f "$HOME/.m2/settings.xml" ]; then
-            echo "settings.xmlが存在します"
-            cat $HOME/.m2/settings.xml
-          else
-            echo "⚠️ settings.xmlが見つかりません"
-          fi
 
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@v5
