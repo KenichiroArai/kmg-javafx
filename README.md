@@ -1,7 +1,7 @@
 # KMG JavaFX（kmg-javafx）
 
 [![Java](https://img.shields.io/badge/Java-25-orange.svg)](https://www.oracle.com/java/)
-[![JavaFX](https://img.shields.io/badge/JavaFX-25--0.2-blue.svg)](https://openjfx.io/)
+[![JavaFX](https://img.shields.io/badge/JavaFX-25.0.2-blue.svg)](https://openjfx.io/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.3-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Maven](https://img.shields.io/badge/Maven-3.x-blue.svg)](https://maven.apache.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
