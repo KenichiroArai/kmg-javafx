@@ -2,7 +2,7 @@
  * Javadoc style sheet
  */
 
-@import url('resources/fonts/dejavu.css');
+@import "resources/fonts/dejavu.css";
 
 /*
  * These CSS custom properties (variables) define the core color and font
@@ -10,8 +10,8 @@
  */
 :root {
     /* body, block and code fonts */
-    --body-font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
-    --block-font-family: 'DejaVu Serif', Georgia, "Times New Roman", Times, serif;
+    --body-font-family: 'dejavu sans', arial, helvetica, sans-serif;
+    --block-font-family: 'dejavu serif', georgia, "times new roman", times, serif;
     --code-font-family: 'DejaVu Sans Mono', monospace;
     /* Base font sizes for body and code elements */
     --body-font-size: 14px;

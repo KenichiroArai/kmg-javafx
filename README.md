@@ -1,8 +1,8 @@
 # KMG JavaFX（kmg-javafx）
 
-[![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)
-[![JavaFX](https://img.shields.io/badge/JavaFX-26--ea12-blue.svg)](https://openjfx.io/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-25-orange.svg)](https://www.oracle.com/java/)
+[![JavaFX](https://img.shields.io/badge/JavaFX-25.0.2-blue.svg)](https://openjfx.io/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.3-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Maven](https://img.shields.io/badge/Maven-3.x-blue.svg)](https://maven.apache.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -47,9 +47,9 @@ kmg-javafx/
 
 ## 開発環境
 
-- Java 21
-- JavaFX 26-ea+12
-- Spring Boot 3.5.6
+- Java 25
+- JavaFX 25.0.2
+- Spring Boot 4.0.3
 - Maven 3.x
 - JUnit Jupiter 5.13.4
 - TestFX 4.0.18
@@ -60,15 +60,15 @@ kmg-javafx/
 - Maven Compiler Plugin 3.12.1
 - Maven Surefire Plugin 3.2.5（JUnit テストレポート用）
 - JaCoCo Maven Plugin 0.8.14（カバレッジレポート用）
-- Spring Boot Maven Plugin 3.5.6
+- Spring Boot Maven Plugin 4.0.3
 - JavaFX Maven Plugin 0.0.8
-- Exec Maven Plugin 3.6.2
+- Exec Maven Plugin 3.6.3
 
 ### プロジェクト情報
 
 - グループ ID: kmg.javafx
 - アーティファクト ID: kmg-javafx
-- バージョン: 0.1.0
+- バージョン: 0.2.0
 - エンコーディング: UTF-8
 
 ## ビルド方法
@@ -120,12 +120,12 @@ KMG シリーズの JUnit テストの抽象クラスです。以下の機能を
 
 ### 主要依存関係
 
-- **kmg-core**: KMG コアライブラリ（0.2.1）
-- **kmg-fund**: KMG 基盤ライブラリ（0.1.1）
-- **JavaFX Controls**: JavaFX コントロール（26-ea+12）
-- **JavaFX FXML**: JavaFX FXML サポート（26-ea+12）
-- **JavaFX Graphics**: JavaFX グラフィックス（26-ea+12）
-- **JavaFX Base**: JavaFX ベース（26-ea+12）
+- **kmg-core**: KMG コアライブラリ（0.3.1）
+- **kmg-fund**: KMG 基盤ライブラリ（0.3.1）
+- **JavaFX Controls**: JavaFX コントロール（25.0.2）
+- **JavaFX FXML**: JavaFX FXML サポート（25.0.2）
+- **JavaFX Graphics**: JavaFX グラフィックス（25.0.2）
+- **JavaFX Base**: JavaFX ベース（25.0.2）
 
 ### テスト依存関係
 

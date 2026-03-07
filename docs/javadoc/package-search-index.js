@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"kmg.javafx.infrastructure.test"},{"l":"すべてのパッケージ","u":"allpackages-index.html"}];updateSearchResults();
+packageSearchIndex = [{"l":"kmg.javafx.infrastructure.test"},{"l":"すべてのパッケージ","u":"allpackages-index.html","k":"18"}];updateSearchResults();
